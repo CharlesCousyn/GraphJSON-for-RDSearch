@@ -1,0 +1,40 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <title>Bar Chart</title>
+    <script src="Chart.bundle.js"></script>
+    <script src="script.js"></script>
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+<div id="container" style="width: 75%;">
+    <h3>Global Performances:</h3>
+    <ul>
+        <li><span>Precision: </span><span id="precisionValue"></span></li>
+        <li><span>Recall: </span><span id="recallValue"></span></li>
+        <li><span>F_Score: </span><span id="fscoreValue"></span></li>
+    </ul>
+
+    <h3>Performances by Disease:</h3>
+    <canvas id="canvas"></canvas>
+</div>
+<button id="addRemovePrecision">Add/Remove Precision</button>
+<button id="addRemoveRecall">Add/Remove Recall</button>
+<button id="addRemoveFscore">Add/Remove F-Score</button>
+<button id="addRemoveNumberOfPublications">Add/Remove Number of publications</button>
+<button id="showAll">Show All</button>
+
+<p>Select a result file from the Evaluation process:</p>
+<input id="loadResults" name="monFichier" type="file">
+</body>
+
+</html>
