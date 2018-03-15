@@ -13,6 +13,7 @@
             -ms-user-select: none;
         }
     </style>
+    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
@@ -27,11 +28,11 @@
     <h3>Performances by Disease:</h3>
     <canvas id="canvas"></canvas>
 </div>
-<button id="addRemovePrecision">Add/Remove Precision</button>
-<button id="addRemoveRecall">Add/Remove Recall</button>
-<button id="addRemoveFscore">Add/Remove F-Score</button>
-<button id="addRemoveNumberOfPublications">Add/Remove Number of publications</button>
-<button id="showAll">Show All</button>
+<button id="addRemovePrecision" class="button precision">Add/Remove Precision</button>
+<button id="addRemoveRecall" class="button recall">Add/Remove Recall</button>
+<button id="addRemoveFscore" class="button fScore">Add/Remove F-Score</button>
+<button id="addRemoveNumberOfPublications" class="button numberOfPublications">Add/Remove Number of publications</button>
+<button id="showAll" class="button">Show All</button>
 
 <p>Select a result file from the Evaluation process:</p>
 <input id="loadResults" name="monFichier" type="file">
