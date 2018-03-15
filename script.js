@@ -175,8 +175,9 @@ window.onload = function()
 
     document.getElementById('loadResults').addEventListener(
         'change',
-        function(evt)
+        evt =>
         {
+            console.log("heyy");
             let files = evt.target.files;
             let file = files[0];
             let reader = new FileReader();
@@ -195,6 +196,7 @@ window.onload = function()
                 diseases.sort((disease1, disease2)=> disease1.NumberOfPublications - disease2.NumberOfPublications);
 
                 //Create bars
+                barChartData.labels = [];
                 for(let i =0; i <diseases.length; i++)
                 {
                     barChartData.labels.push(diseases[i].OrphaNumber);
