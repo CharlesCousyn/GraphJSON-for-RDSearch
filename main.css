@@ -8,6 +8,10 @@
     font-size: 16px;
     color: black;
 }
+#sizeBar
+{
+    display:block;
+}
 
 .precision {
     background-color: #36a2eb;

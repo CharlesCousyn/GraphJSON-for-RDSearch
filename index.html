@@ -5,7 +5,10 @@
 <head>
     <title>Bar Chart</title>
     <script src="Chart.bundle.js"></script>
-    <script src="script.js"></script>
+    <script src="scriptv2.js"></script>
+    <!--<script src="script.js"></script>-->
+    <!--<script src="d3.min.js"></script>-->
+    <!--<script src="testD3.js"></script>-->
     <style>
         canvas {
             -moz-user-select: none;
@@ -33,9 +36,16 @@
 <button id="addRemoveFscore" class="button fScore">Add/Remove F-Score</button>
 <button id="addRemoveNumberOfPublications" class="button numberOfPublications">Add/Remove Number of publications</button>
 <button id="showAll" class="button">Show All</button>
+<div><p>Size of each class: (Range 0 to 1000)</p></div>
+<input type="number" id="sizeBar" min="10" max="100" step="10" value="100"/>
 
 <p>Select a result file from the Evaluation process:</p>
 <input id="loadResults" name="monFichier" type="file">
+
+<div class="chart-example" id="chart">
+    <svg></svg>
+</div>
+
 </body>
 
 </html>

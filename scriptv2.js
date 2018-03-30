@@ -1,16 +1,18 @@
 //Save the timestamp
 let timestamp = "";
+//Save of all file data
+let data =[];
 
 //Creating datasets
 let precisionDataset =
     {
-    label: 'Precision',
-    backgroundColor: "#36a2eb",
-    borderColor: "#000000",
-    borderWidth: 1,
-    yAxisID:"perf",
-    data: []
-};
+        label: 'Precision',
+        backgroundColor: "#36a2eb",
+        borderColor: "#000000",
+        borderWidth: 1,
+        yAxisID:"perf",
+        data: []
+    };
 
 let recallDataset = {
     label: 'Recall',
@@ -41,9 +43,11 @@ let numberOfPublicationsDataSet = {
 
 let barChartData =
     {
-    labels: [],
-    datasets: [ precisionDataset, recallDataset, fscoreDataset, numberOfPublicationsDataSet ]
-};
+        labels: [],
+        datasets: [ precisionDataset, recallDataset, fscoreDataset]
+    };
+
+let average = arr => arr.reduce((a,b) => (isNaN(a) || isNaN(b))? 0.0 : a+b, 0.0)/arr.length;
 
 window.onload = function()
 {
@@ -80,10 +84,7 @@ window.onload = function()
                                 id: 'numberOfPublications',
                                 type: 'linear',
                                 position: 'right'
-                            }],
-                    xAxes: [{
-                        barThickness : 10
-                    }]
+                            }]
                 }
             }
     });
@@ -185,7 +186,7 @@ window.onload = function()
             let reader = new FileReader();
             reader.onload = event =>
             {
-                let data = JSON.parse(event.target.result);
+                data = JSON.parse(event.target.result);
 
                 //General informations
                 document.getElementById("precisionValue").textContent = data.general.Precision;
@@ -194,21 +195,39 @@ window.onload = function()
 
                 let diseases = data.perDisease;
 
-                //Sort the diseases by NumberOfPublications
-                diseases.sort((disease1, disease2)=> disease1.NumberOfPublications - disease2.NumberOfPublications);
+                //Data processing:
+                let newData = [];
+                let newDataPrecision = [];
+                let newDataRecall = [];
+                let newDataFScore = [];
 
-                //Create bars
-                barChartData.labels = [];
-                for(let i =0; i <diseases.length; i++)
+                //x classes
+                barChartData.labels=[];
+                let sizeBar=  100;
+                let numberOfBar = 1000/sizeBar;
+
+                for(let i = 0; i< numberOfBar; i++)
                 {
-                    barChartData.labels.push(diseases[i].OrphaNumber);
-                    precisionDataset.data.push(diseases[i].Precision);
-                    recallDataset.data.push(diseases[i].Recall);
-                    fscoreDataset.data.push(diseases[i].F_Score);
-                    numberOfPublicationsDataSet.data.push(diseases[i].NumberOfPublications);
+                    //Change the label
+                    barChartData.labels.push((i*sizeBar)+"-"+((i+1)*sizeBar));
+
+                    //Find the coresponding elements
+                    newData[i] = diseases
+                        .filter(x => x.NumberOfPublications >= i*sizeBar && x.NumberOfPublications < (i+1)*sizeBar);
+                    //console.log(newData[i].map(x=>x.Precision));
+                    newDataPrecision[i] = average(newData[i].map(x=>x.Precision));
+                    newDataRecall[i] = average(newData[i].map(x=>x.Recall));
+                    newDataFScore[i] = average(newData[i].map(x=>x.F_Score));
                 }
 
-                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset, numberOfPublicationsDataSet ];
+
+
+                //Create bars
+                precisionDataset.data=newDataPrecision;
+                recallDataset.data=newDataRecall;
+                fscoreDataset.data=newDataFScore;
+
+                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset ];
 
                 timestamp = data.general.TimeStamp;
 
@@ -219,6 +238,50 @@ window.onload = function()
             reader.readAsText(file)
         },
         false);
+
+    document.getElementById('sizeBar').addEventListener(
+        'change',
+        evt =>
+        {
+            let value = Number(document.getElementById('sizeBar').value);
+
+            let diseases = data.perDisease;
+
+            //Data processing:
+            let newData = [];
+            let newDataPrecision = [];
+            let newDataRecall = [];
+            let newDataFScore = [];
+
+            //x classes
+            barChartData.labels=[];
+            let sizeBar=  value;
+            let numberOfBar = 1000/sizeBar;
+
+            for(let i = 0; i< numberOfBar; i++)
+            {
+                //Change the label
+                barChartData.labels.push((i*sizeBar)+"-"+((i+1)*sizeBar));
+
+                //Find the coresponding elements
+                newData[i] = diseases
+                    .filter(x => x.NumberOfPublications >= i*sizeBar && x.NumberOfPublications < (i+1)*sizeBar);
+                //console.log(newData[i].map(x=>x.Precision));
+                newDataPrecision[i] = average(newData[i].map(x=>x.Precision));
+                newDataRecall[i] = average(newData[i].map(x=>x.Recall));
+                newDataFScore[i] = average(newData[i].map(x=>x.F_Score));
+            }
+
+
+
+            //Create bars
+            precisionDataset.data=newDataPrecision;
+            recallDataset.data=newDataRecall;
+            fscoreDataset.data=newDataFScore;
+
+            window.myBar.update();
+        }
+        );
 
 };
 
