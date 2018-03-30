@@ -32,19 +32,19 @@ let fscoreDataset = {
     data: []
 };
 
-let numberOfPublicationsDataSet = {
-    label: 'Number of publications',
+let numberOfDiseasesDataSet = {
+    label: 'Number of diseases',
     backgroundColor: "#53eb3d",
     borderColor: "#000000",
     borderWidth: 1,
-    yAxisID:"numberOfPublications",
+    yAxisID:"numberOfDiseases",
     data: []
 };
 
 let barChartData =
     {
         labels: [],
-        datasets: [ precisionDataset, recallDataset, fscoreDataset]
+        datasets: [ precisionDataset, recallDataset, fscoreDataset, numberOfDiseasesDataSet]
     };
 
 let average = arr => arr.reduce((a,b) => (isNaN(a) || isNaN(b))? 0.0 : a+b, 0.0)/arr.length;
@@ -77,14 +77,41 @@ window.onload = function()
                                     steps: 10,
                                     stepValue: 0.1,
                                     max: 1
+                                },
+                                scaleLabel:{
+                                    labelString:"Performance",
+                                    display:true,
+                                    fontSize:16,
+                                    fontColor:"#666",
+                                    fontStyle:"bold"
                                 }
                             },
                             {
-                                label:"Number of publications",
-                                id: 'numberOfPublications',
+                                label:"Number of diseases",
+                                id: 'numberOfDiseases',
                                 type: 'linear',
-                                position: 'right'
-                            }]
+                                position: 'right',
+                                scaleLabel:{
+                                    labelString:"Number of diseases",
+                                    display:true,
+                                    fontSize:16,
+                                    fontColor:"#666",
+                                    fontStyle:"bold"
+                                }
+                            }],
+                    xAxes:
+                    [
+                        {
+                            label:"Number of publications",
+                            scaleLabel:{
+                                labelString:"Number of publications",
+                                display:true,
+                                fontSize:16,
+                                fontColor:"#666",
+                                fontStyle:"bold"
+                            }
+                        }
+                    ]
                 }
             }
     });
@@ -94,7 +121,7 @@ window.onload = function()
         {
             if(precisionDataset.length !== 0)
             {
-                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset, numberOfPublicationsDataSet ];
+                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset, numberOfDiseasesDataSet];
                 window.myBar.update();
             }
         }
@@ -157,19 +184,19 @@ window.onload = function()
         }
     );
 
-    document.getElementById("addRemoveNumberOfPublications").addEventListener("click",
+    document.getElementById("addRemoveNumberOfDiseases").addEventListener("click",
         event =>
         {
             if(precisionDataset.length !== 0)
             {
-                let indexOfNumberOfPublicationsDataset = barChartData.datasets.map(x => x.label).indexOf("Number of publications");
-                if(indexOfNumberOfPublicationsDataset === -1)
+                let indexOfNumberOfDiseasesDataset = barChartData.datasets.map(x => x.label).indexOf("Number of diseases");
+                if(indexOfNumberOfDiseasesDataset === -1)
                 {
-                    barChartData.datasets.push(numberOfPublicationsDataSet);
+                    barChartData.datasets.push(numberOfDiseasesDataSet);
                 }
                 else
                 {
-                    barChartData.datasets.splice(indexOfNumberOfPublicationsDataset, 1);
+                    barChartData.datasets.splice(indexOfNumberOfDiseasesDataset, 1);
                 }
                 window.myBar.update();
             }
@@ -200,6 +227,7 @@ window.onload = function()
                 let newDataPrecision = [];
                 let newDataRecall = [];
                 let newDataFScore = [];
+                let newDataNumberOfDiseases = [];
 
                 //x classes
                 barChartData.labels=[];
@@ -218,6 +246,7 @@ window.onload = function()
                     newDataPrecision[i] = average(newData[i].map(x=>x.Precision));
                     newDataRecall[i] = average(newData[i].map(x=>x.Recall));
                     newDataFScore[i] = average(newData[i].map(x=>x.F_Score));
+                    newDataNumberOfDiseases[i] = newData[i].length;
                 }
 
 
@@ -226,8 +255,9 @@ window.onload = function()
                 precisionDataset.data=newDataPrecision;
                 recallDataset.data=newDataRecall;
                 fscoreDataset.data=newDataFScore;
+                numberOfDiseasesDataSet.data = newDataNumberOfDiseases;
 
-                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset ];
+                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset, numberOfDiseasesDataSet ];
 
                 timestamp = data.general.TimeStamp;
 
@@ -252,6 +282,7 @@ window.onload = function()
             let newDataPrecision = [];
             let newDataRecall = [];
             let newDataFScore = [];
+            let newDataNumberOfDiseases = [];
 
             //x classes
             barChartData.labels=[];
@@ -270,6 +301,7 @@ window.onload = function()
                 newDataPrecision[i] = average(newData[i].map(x=>x.Precision));
                 newDataRecall[i] = average(newData[i].map(x=>x.Recall));
                 newDataFScore[i] = average(newData[i].map(x=>x.F_Score));
+                newDataNumberOfDiseases[i] = newData[i].length;
             }
 
 
@@ -278,6 +310,7 @@ window.onload = function()
             precisionDataset.data=newDataPrecision;
             recallDataset.data=newDataRecall;
             fscoreDataset.data=newDataFScore;
+            numberOfDiseasesDataSet.data = newDataNumberOfDiseases;
 
             window.myBar.update();
         }
