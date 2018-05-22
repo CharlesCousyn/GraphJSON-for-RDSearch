@@ -6,6 +6,7 @@
     <title>Bar Chart</title>
     <script src="Chart.bundle.js"></script>
     <script src="scriptv2.js"></script>
+    <script src="metaScript.js"></script>
     <!--<script src="script.js"></script>-->
     <!--<script src="d3.min.js"></script>-->
     <!--<script src="testD3.js"></script>-->
@@ -20,27 +21,48 @@
 </head>
 
 <body>
-<div id="container" style="width: 75%;">
-    <h3>Global Performances:</h3>
-    <ul>
-        <li><span>Precision: </span><span id="precisionValue"></span></li>
-        <li><span>Recall: </span><span id="recallValue"></span></li>
-        <li><span>F_Score: </span><span id="fscoreValue"></span></li>
-    </ul>
+<div>
+    <div id="container" style="width: 75%;">
+        <h3>Global Performances:</h3>
+        <ul>
+            <li><span>Precision: </span><span id="precisionValue"></span></li>
+            <li><span>Recall: </span><span id="recallValue"></span></li>
+            <li><span>F_Score: </span><span id="fscoreValue"></span></li>
+        </ul>
 
-    <h3>Performances by Disease:</h3>
-    <canvas id="canvas"></canvas>
+        <h3>Performances by Disease:</h3>
+        <canvas id="canvas"></canvas>
+    </div>
+    <button id="addRemovePrecision" class="button precision">Add/Remove Precision</button>
+    <button id="addRemoveRecall" class="button recall">Add/Remove Recall</button>
+    <button id="addRemoveFscore" class="button fScore">Add/Remove F-Score</button>
+    <button id="addRemoveNumberOfDiseases" class="button numberOfDiseases">Add/Remove Number of diseases</button>
+    <button id="showAll" class="button">Show All</button>
+    <div><p>Size of each class: (Range 0 to 1000)</p></div>
+    <input type="number" id="sizeBar" min="10" max="100" step="10" value="100"/>
+
+    <p>Select a result file from the Evaluation process:</p>
+    <input id="loadResults" name="monFichier" type="file">
 </div>
-<button id="addRemovePrecision" class="button precision">Add/Remove Precision</button>
-<button id="addRemoveRecall" class="button recall">Add/Remove Recall</button>
-<button id="addRemoveFscore" class="button fScore">Add/Remove F-Score</button>
-<button id="addRemoveNumberOfDiseases" class="button numberOfDiseases">Add/Remove Number of diseases</button>
-<button id="showAll" class="button">Show All</button>
-<div><p>Size of each class: (Range 0 to 1000)</p></div>
-<input type="number" id="sizeBar" min="10" max="100" step="10" value="100"/>
 
-<p>Select a result file from the Evaluation process:</p>
-<input id="loadResults" name="monFichier" type="file">
+<div>
+    <div id="metaResults" style="width: 75%;">
+        <h3>Best Performances:</h3>
+        <ul>
+            <li><span>Precision: </span><span id="precisionValueMeta"></span></li>
+            <li><span>Recall: </span><span id="recallValueMeta"></span></li>
+            <li><span>F_Score: </span><span id="fscoreValueMeta"></span></li>
+            <li><span>Rang moyen Vrai symptomes: </span><span id="rangMoyenMeta"></span></li>
+            <li><span>Ecart type Rang Vrai symptomes: </span><span id="ecartTypeRangMeta"></span></li>
+        </ul>
+
+        <h3>Performances by Formula:</h3>
+        <canvas id="canvasMeta"></canvas>
+    </div>
+
+    <p>Select a result file from the MetaEvaluation process:</p>
+    <input id="loadMetaResults" name="monFichier" type="file">
+</div>
 
 <div class="chart-example" id="chart">
     <svg></svg>
