@@ -39,10 +39,11 @@ let bubbleChartData =
 let coeff = 20.0;
 let meanNumberRelatedEntities = 0;
 
-window.onload = function()
+window.addEventListener("load", function()
 {
-    let ctx = document.getElementById('canvasMeta').getContext('2d');
-    window.myMetaBubbleChart = new Chart(ctx, {
+    let ctxMeta = document.getElementById('canvasMeta').getContext('2d');
+
+    window.myMetaBubbleChart = new Chart(ctxMeta, {
         type: 'bubble',
         data: bubbleChartData,
         options:
@@ -57,7 +58,7 @@ window.onload = function()
                 tooltips: {
                     mode: 'index',
                     callbacks: {
-                        // Use the footer callback to display the sum of the items showing in the tooltip
+                        // Use the footer callback to display the result of a function
                         footer:
                             (tooltipItems, data) =>
                             {
@@ -163,10 +164,10 @@ window.onload = function()
 
                 //Create bubbles
                 metaDataset.data = newMetaDataset;
-                /*
-                console.log("Dernière donnée: ");
-                console.log(metaDataset.data[metaDataset.data.length - 1]);
-                metaDataset.data = metaDataset.data.slice(0, metaDataset.data.length - 1);*/
+
+                //console.log("Dernière donnée: ");
+                //console.log(metaDataset.data[metaDataset.data.length - 1]);
+                //metaDataset.data = metaDataset.data.slice(0, metaDataset.data.length - 1);
 
                 bubbleChartData.datasets=[metaDataset];
 
@@ -176,5 +177,5 @@ window.onload = function()
         },
         false);
 
-};
+});
 

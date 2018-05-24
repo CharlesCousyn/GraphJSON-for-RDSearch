@@ -49,7 +49,7 @@ let barChartData =
 
 let average = arr => arr.reduce((a,b) => (isNaN(a) || isNaN(b))? 0.0 : a+b, 0.0)/arr.length;
 
-window.onload = function()
+window.addEventListener("load", function()
 {
     let ctx = document.getElementById('canvas').getContext('2d');
     window.myBar = new Chart(ctx, {
@@ -185,7 +185,7 @@ window.onload = function()
     );
 
     document.getElementById("addRemoveNumberOfDiseases").addEventListener("click",
-        event =>
+        () =>
         {
             if(precisionDataset.length !== 0)
             {
@@ -316,5 +316,5 @@ window.onload = function()
         }
         );
 
-};
+});
 
