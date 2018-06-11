@@ -6,15 +6,7 @@ let metaDataset =
     {
         label: 'NormalizedMeanRank',
         //backgroundColor: "#c2d6eb",
-        backgroundColor:(context) =>
-        {
-            let index = context.dataIndex;
-            let myData = context.dataset.data;
-            let value = myData[index].r;
-            let minValue = Math.min.apply(null, myData.map(data=> data.r));
 
-            return minValue !== value ? "#c2d6eb" : 'red';
-        },
         borderColor: "#3b31eb",
         borderWidth: 1,
         pointBorderColor: "rgba(75,192,192,1)",
@@ -62,20 +54,27 @@ window.addEventListener("load", function()
                         footer:
                             (tooltipItems, data) =>
                             {
-                                let meanRank = 0;
+                                let meanRank = 0.0;
 
                                 tooltipItems.forEach(
                                     (tooltipItem) =>
                                     {
-                                        meanRank =
-                                            data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].r *
-                                            meanNumberRelatedEntities / coeff;
-                                        //meanRank = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].r;
-                                        //meanRank = meanNumberRelatedEntities;
-                                        //meanRank = 12;
+                                        meanRank = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].value;
                                     });
-                                return 'MeanRank: ' + meanRank;
+                                return "MeanRank: " + meanRank;
                             },
+                        afterFooter:
+                            (tooltipItems, data) =>
+                            {
+                                let SD = 0.0;
+
+                                tooltipItems.forEach(
+                                    (tooltipItem) =>
+                                    {
+                                        SD = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].standartDeviation;
+                                    });
+                                return "Standard Deviation: "+ SD;
+                            }
                     },
                     footerFontStyle: 'normal'
                 },
@@ -102,6 +101,34 @@ window.addEventListener("load", function()
                                 }
                             }
                             ]
+                },
+                elements: {
+                    point: {
+                        radius: function(context) {
+                            let value = context.dataset.data[context.dataIndex].value;
+                            let size = context.chart.width;
+                            let base = Math.abs(value) / 1500;
+                            return (size / 24) * base;
+                        },
+                        backgroundColor:(context) =>
+                        {
+                            let index = context.dataIndex;
+                            let myData = context.dataset.data;
+                            let value = myData[index].standartDeviation;
+
+                            let oldMinValue = Math.min.apply(null, myData.map(data=> data.value));
+                            let oldMaxValue = Math.max.apply(null, myData.map(data=> data.value));
+
+                            let newMinValue = 0.0;
+                            let newMaxValue = 1.0;
+
+                            //Normalization
+                            let newValue = newMinValue + (value - oldMinValue)*(newMaxValue - newMinValue ) / (oldMaxValue - oldMinValue);
+
+                            //Transform to color code
+                            return getGradientColor('#000099', '#ff0000', newValue);
+                        }
+                    }
                 }
             }
     });
@@ -154,7 +181,9 @@ window.addEventListener("load", function()
                         let elem = {
                             x: pc.TFType,
                             y: pc.IDFType,
-                            r: coeff * pc.MeanRankRealPositives / pc.MeanNumberOfRelatedEntitiesFound
+                            //r: coeff * pc.MeanRankRealPositives / pc.MeanNumberOfRelatedEntitiesFound,
+                            value: pc.MeanRankRealPositives,
+                            standartDeviation: pc.StandardDeviationRankRealPositivesGeneral
                         };
                         newMetaDataset.push(elem);
                     }
@@ -178,4 +207,44 @@ window.addEventListener("load", function()
         false);
 
 });
+
+let getGradientColor = function(start_color, end_color, percent) {
+    // strip the leading # if it's there
+    start_color = start_color.replace(/^\s*#|\s*$/g, '');
+    end_color = end_color.replace(/^\s*#|\s*$/g, '');
+
+    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+    if(start_color.length === 3){
+        start_color = start_color.replace(/(.)/g, '$1$1');
+    }
+
+    if(end_color.length === 3){
+        end_color = end_color.replace(/(.)/g, '$1$1');
+    }
+
+    // get colors
+    let start_red = parseInt(start_color.substr(0, 2), 16),
+        start_green = parseInt(start_color.substr(2, 2), 16),
+        start_blue = parseInt(start_color.substr(4, 2), 16);
+
+    let end_red = parseInt(end_color.substr(0, 2), 16),
+        end_green = parseInt(end_color.substr(2, 2), 16),
+        end_blue = parseInt(end_color.substr(4, 2), 16);
+
+    // calculate new color
+    let diff_red = end_red - start_red;
+    let diff_green = end_green - start_green;
+    let diff_blue = end_blue - start_blue;
+
+    diff_red = ( (diff_red * percent) + start_red ).toString(16).split('.')[0];
+    diff_green = ( (diff_green * percent) + start_green ).toString(16).split('.')[0];
+    diff_blue = ( (diff_blue * percent) + start_blue ).toString(16).split('.')[0];
+
+    // ensure 2 digits by color
+    if( diff_red.length === 1 ) diff_red = '0' + diff_red;
+    if( diff_green.length === 1 ) diff_green = '0' + diff_green;
+    if( diff_blue.length === 1 ) diff_blue = '0' + diff_blue;
+
+    return '#' + diff_red + diff_green + diff_blue;
+};
 
