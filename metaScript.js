@@ -5,7 +5,6 @@ let metadata =[];
 let metaDataset =
     {
         label: 'NormalizedMeanRank',
-        //backgroundColor: "#c2d6eb",
 
         borderColor: "#3b31eb",
         borderWidth: 1,

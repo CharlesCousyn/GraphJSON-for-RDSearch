@@ -32,6 +32,15 @@ let fscoreDataset = {
     data: []
 };
 
+let meanRankrealPositivesQuotientDataset = {
+    label: 'MeanRankRealPositivesQuotient',
+    backgroundColor: "#ff8216",
+    borderColor: "#000000",
+    borderWidth: 1,
+    yAxisID:"perf",
+    data: []
+};
+
 let numberOfDiseasesDataSet = {
     label: 'Number of diseases',
     backgroundColor: "#53eb3d",
@@ -44,7 +53,7 @@ let numberOfDiseasesDataSet = {
 let barChartData =
     {
         labels: [],
-        datasets: [ precisionDataset, recallDataset, fscoreDataset, numberOfDiseasesDataSet]
+        datasets: [ precisionDataset, recallDataset, fscoreDataset, meanRankrealPositivesQuotientDataset, numberOfDiseasesDataSet]
     };
 
 let average = arr => arr.reduce((a,b) => (isNaN(a) || isNaN(b))? 0.0 : a+b, 0.0)/arr.length;
@@ -121,7 +130,7 @@ window.addEventListener("load", function()
         {
             if(precisionDataset.length !== 0)
             {
-                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset, numberOfDiseasesDataSet];
+                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset, meanRankrealPositivesQuotientDataset, numberOfDiseasesDataSet];
                 window.myBar.update();
             }
         }
@@ -203,6 +212,25 @@ window.addEventListener("load", function()
         }
     );
 
+    document.getElementById("addRemoveMeanRankRealPositivesQuotient").addEventListener("click",
+        () =>
+        {
+            if(precisionDataset.length !== 0)
+            {
+                let indexOfMeanRankRealPositivesQuotientDataset = barChartData.datasets.map(x => x.label).indexOf("MeanRankRealPositivesQuotient");
+                if(indexOfMeanRankRealPositivesQuotientDataset === -1)
+                {
+                    barChartData.datasets.push(meanRankrealPositivesQuotientDataset);
+                }
+                else
+                {
+                    barChartData.datasets.splice(indexOfMeanRankRealPositivesQuotientDataset, 1);
+                }
+                window.myBar.update();
+            }
+        }
+    );
+
 
     document.getElementById('loadResults').addEventListener(
         'change',
@@ -219,6 +247,8 @@ window.addEventListener("load", function()
                 document.getElementById("precisionValue").textContent = data.general.Precision;
                 document.getElementById("recallValue").textContent = data.general.Recall;
                 document.getElementById("fscoreValue").textContent = data.general.F_Score;
+                document.getElementById("meanRankRealPositivesValue").textContent = data.general.MeanRankRealPositives;
+                document.getElementById("meanNumberOfRelatedEntitiesFoundValue").textContent = data.general.MeanNumberOfRelatedEntitiesFound;
 
                 let diseases = data.perDisease;
 
@@ -227,6 +257,7 @@ window.addEventListener("load", function()
                 let newDataPrecision = [];
                 let newDataRecall = [];
                 let newDataFScore = [];
+                let newDataMeanRankRealPositivesQuotient = [];
                 let newDataNumberOfDiseases = [];
 
                 //x classes
@@ -246,18 +277,20 @@ window.addEventListener("load", function()
                     newDataPrecision[i] = average(newData[i].map(x=>x.Precision));
                     newDataRecall[i] = average(newData[i].map(x=>x.Recall));
                     newDataFScore[i] = average(newData[i].map(x=>x.F_Score));
+                    newDataMeanRankRealPositivesQuotient[i] = average(newData[i].map(x=>x.MeanRankRealPositives / x.NumberOfRelatedEntitiesFound));
                     newDataNumberOfDiseases[i] = newData[i].length;
                 }
 
 
 
                 //Create bars
-                precisionDataset.data=newDataPrecision;
-                recallDataset.data=newDataRecall;
-                fscoreDataset.data=newDataFScore;
+                precisionDataset.data = newDataPrecision;
+                recallDataset.data = newDataRecall;
+                fscoreDataset.data = newDataFScore;
+                meanRankrealPositivesQuotientDataset.data = newDataMeanRankRealPositivesQuotient;
                 numberOfDiseasesDataSet.data = newDataNumberOfDiseases;
 
-                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset, numberOfDiseasesDataSet ];
+                barChartData.datasets=[ precisionDataset, recallDataset, fscoreDataset, meanRankrealPositivesQuotientDataset,  numberOfDiseasesDataSet ];
 
                 timestamp = data.general.TimeStamp;
 
@@ -282,6 +315,7 @@ window.addEventListener("load", function()
             let newDataPrecision = [];
             let newDataRecall = [];
             let newDataFScore = [];
+            let newDataMeanRankRealPositivesQuotient = [];
             let newDataNumberOfDiseases = [];
 
             //x classes
@@ -301,6 +335,7 @@ window.addEventListener("load", function()
                 newDataPrecision[i] = average(newData[i].map(x=>x.Precision));
                 newDataRecall[i] = average(newData[i].map(x=>x.Recall));
                 newDataFScore[i] = average(newData[i].map(x=>x.F_Score));
+                newDataMeanRankRealPositivesQuotient[i] = average(newData[i].map(x=>x.MeanRankRealPositives / x.NumberOfRelatedEntitiesFound));
                 newDataNumberOfDiseases[i] = newData[i].length;
             }
 
@@ -310,6 +345,7 @@ window.addEventListener("load", function()
             precisionDataset.data=newDataPrecision;
             recallDataset.data=newDataRecall;
             fscoreDataset.data=newDataFScore;
+            meanRankrealPositivesQuotientDataset.data = newDataMeanRankRealPositivesQuotient;
             numberOfDiseasesDataSet.data = newDataNumberOfDiseases;
 
             window.myBar.update();
