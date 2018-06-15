@@ -7,6 +7,7 @@
     <script src="Chart.bundle.js"></script>
     <script src="scriptv2.js"></script>
     <script src="metaScript.js"></script>
+    <script src="metaScriptWeight.js"></script>
     <!--<script src="script.js"></script>-->
     <!--<script src="d3.min.js"></script>-->
     <!--<script src="testD3.js"></script>-->
@@ -65,6 +66,29 @@
 
     <p>Select a result file from the MetaEvaluation process:</p>
     <input id="loadMetaResults" name="monFichier" type="file">
+</div>
+
+<div>
+    <div id="metaResultsWeight" style="width: 75%;">
+        <h3>Best Performances:</h3>
+        <ul>
+            <li><span>Precision: </span><span id="precisionMetaWeightValue"></span></li>
+            <li><span>Recall: </span><span id="recallMetaWeightValue"></span></li>
+            <li><span>F_Score: </span><span id="fscoreMetaWeightValue"></span></li>
+            <li><span>Rang moyen Vrai symptomes: </span><span id="meanRankRealPositivesMetaWeightValue"></span></li>
+        </ul>
+
+        <h3>Performances by Threshold:</h3>
+        <canvas id="canvasMetaWeight"></canvas>
+    </div>
+    <button id="addRemovePrecisionMetaWeight" class="button precision">Add/Remove Precision</button>
+    <button id="addRemoveRecallMetaWeight" class="button recall">Add/Remove Recall</button>
+    <button id="addRemoveFscoreMetaWeight" class="button fScore">Add/Remove F-Score</button>
+    <button id="addRemoveMeanRankRealPositivesQuotientMetaWeight" class="button meanRankRealPositivesQuotient">Add/Remove MeanRankRealPositivesQuotient</button>
+    <button id="showAllMetaWeight" class="button">Show All</button>
+
+    <p>Select a result file from the MetaWeightEvaluation process:</p>
+    <input id="loadMetaWeightResults" name="monFichier" type="file">
 </div>
 
 <div class="chart-example" id="chart">

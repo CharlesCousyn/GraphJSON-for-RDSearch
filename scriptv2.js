@@ -126,7 +126,7 @@ window.addEventListener("load", function()
     });
 
     document.getElementById("showAll").addEventListener("click",
-        event =>
+        () =>
         {
             if(precisionDataset.length !== 0)
             {
@@ -137,7 +137,7 @@ window.addEventListener("load", function()
     );
 
     document.getElementById("addRemovePrecision").addEventListener("click",
-        event =>
+        () =>
         {
             if(precisionDataset.length !== 0)
             {
@@ -156,7 +156,7 @@ window.addEventListener("load", function()
     );
 
     document.getElementById("addRemoveRecall").addEventListener("click",
-        event =>
+        () =>
         {
             if(precisionDataset.length !== 0)
             {
@@ -175,7 +175,7 @@ window.addEventListener("load", function()
     );
 
     document.getElementById("addRemoveFscore").addEventListener("click",
-        event =>
+        () =>
         {
             if(precisionDataset.length !== 0)
             {
@@ -304,7 +304,7 @@ window.addEventListener("load", function()
 
     document.getElementById('sizeBar').addEventListener(
         'change',
-        evt =>
+        () =>
         {
             let value = Number(document.getElementById('sizeBar').value);
 

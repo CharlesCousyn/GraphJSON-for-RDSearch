@@ -27,7 +27,6 @@ let bubbleChartData =
         datasets: [metaDataset]
     };
 
-let coeff = 20.0;
 let meanNumberRelatedEntities = 0;
 
 window.addEventListener("load", function()
