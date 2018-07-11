@@ -3,41 +3,52 @@ let timestampMetaWeight = "";
 //Save of all file data
 let metaWeightdata =[];
 
+let beginThreshold = 0.0;
+let endThreshold = 2.5;
+
 //Creating datasets
 let precisionWeightDataset =
     {
         label: 'Precision',
-        backgroundColor: "#36a2eb",
-        borderColor: "#000000",
-        borderWidth: 1,
+        //backgroundColor: "#36a2eb",
+        //borderColor: "#000000",
+        borderColor: "#36a2eb",
+        //borderWidth: 1,
+        borderWidth: 2,
         yAxisID:"perf",
         data: []
     };
 
 let recallWeightDataset = {
     label: 'Recall',
-    backgroundColor: "#f1f442",
-    borderColor: "#000000",
-    borderWidth: 1,
+    //backgroundColor: "#f1f442",
+    //borderColor: "#000000",
+    borderColor: "#f1f442",
+    //borderWidth: 1,
+    borderWidth: 2,
     yAxisID:"perf",
     data: []
 };
 
 let fscoreWeightDataset = {
     label: 'F-Score',
-    backgroundColor: "#ff6384",
-    borderColor: "#000000",
-    borderWidth: 1,
+    //backgroundColor: "#ff6384",
+    //borderColor: "#000000",
+    borderColor: "#ff6384",
+    //borderWidth: 1,
+    borderWidth: 2,
     yAxisID:"perf",
     data: []
 };
 
 let meanRankrealPositivesQuotientWeightDataset = {
     label: 'MeanRankRealPositivesQuotient',
-    backgroundColor: "#ff8216",
-    borderColor: "#000000",
-    borderWidth: 1,
-    yAxisID:"perf",
+    //backgroundColor: "#ff8216",
+    //borderColor: "#000000",
+    borderColor: "#ff8216",
+    //borderWidth: 1,
+    borderWidth: 2,
+    yAxisID:"meanRank",
     data: []
 };
 
@@ -51,7 +62,7 @@ window.addEventListener("load", function()
 {
     let ctxMetaWeight = document.getElementById('canvasMetaWeight').getContext('2d');
     window.myBarMetaWeight = new Chart(ctxMetaWeight, {
-        type: 'bar',
+        type: 'line',
         data: barChartWeightData,
         options:
             {
@@ -83,7 +94,21 @@ window.addEventListener("load", function()
                                     fontColor:"#666",
                                     fontStyle:"bold"
                                 }
-                            }],
+                            },
+                            {
+                                label:"MeanRank",
+                                id: 'meanRank',
+                                type: 'linear',
+                                position: 'right',
+                                scaleLabel:{
+                                    labelString:"MeanRank",
+                                    display:true,
+                                    fontSize:16,
+                                    fontColor:"#666",
+                                    fontStyle:"bold"
+                                }
+                            }
+                        ],
                     xAxes:
                         [
                             {
@@ -208,7 +233,7 @@ window.addEventListener("load", function()
                 document.getElementById("fscoreMetaWeightValue").textContent = metaWeightdata.bestThreshold.F_Score;
                 document.getElementById("meanRankRealPositivesMetaWeightValue").textContent = metaWeightdata.bestThreshold.MeanRankRealPositives;
 
-                let thresholds = metaWeightdata.perThreshold;
+                let thresholds = metaWeightdata.perThreshold.sort((a, b) => a.Threshold - b.Threshold);
 
                 //Data processing:
                 let newDataPrecision = [];
@@ -225,7 +250,10 @@ window.addEventListener("load", function()
                     newDataPrecision[i] = actualThreshold.Precision;
                     newDataRecall[i] = actualThreshold.Recall;
                     newDataFScore[i] = actualThreshold.F_Score;
-                    newDataMeanRankRealPositivesQuotient[i] = actualThreshold.MeanRankRealPositives / actualThreshold.NumberOfRelatedEntitiesFound;
+                    newDataMeanRankRealPositivesQuotient[i] = actualThreshold.MeanRankRealPositives / actualThreshold.MeanNumberOfRelatedEntitiesFound;
+                    console.log(actualThreshold.MeanRankRealPositives);
+                    console.log(actualThreshold.MeanNumberOfRelatedEntitiesFound);
+                    console.log(newDataMeanRankRealPositivesQuotient[i]);
                 }
 
 
@@ -247,6 +275,92 @@ window.addEventListener("load", function()
             reader.readAsText(file)
         },
         false);
+
+    document.getElementById('beginThreshold').addEventListener(
+        'change',
+        () =>
+            {
+                beginThreshold = Number(document.getElementById('beginThreshold').value);
+
+                //Data processing:
+                let newDataPrecision = [];
+                let newDataRecall = [];
+                let newDataFScore = [];
+                let newDataMeanRankRealPositivesQuotient = [];
+
+                let thresholds = metaWeightdata.perThreshold.filter(a => a.Threshold >= beginThreshold && a.Threshold <= endThreshold);
+
+                barChartWeightData.labels = [];
+                for(let i = 0; i< thresholds.length; i++)
+                {
+                    let actualThreshold = thresholds[i];
+                    //Change the label
+                    barChartWeightData.labels.push(actualThreshold.Threshold);
+
+                    newDataPrecision[i] = actualThreshold.Precision;
+                    newDataRecall[i] = actualThreshold.Recall;
+                    newDataFScore[i] = actualThreshold.F_Score;
+                    newDataMeanRankRealPositivesQuotient[i] = actualThreshold.MeanRankRealPositives / actualThreshold.MeanNumberOfRelatedEntitiesFound;
+                }
+
+
+
+                //Create bars
+                precisionWeightDataset.data = newDataPrecision;
+                recallWeightDataset.data = newDataRecall;
+                fscoreWeightDataset.data = newDataFScore;
+                meanRankrealPositivesQuotientWeightDataset.data = newDataMeanRankRealPositivesQuotient;
+
+                barChartWeightData.datasets=[ precisionWeightDataset, recallWeightDataset, fscoreWeightDataset, meanRankrealPositivesQuotientWeightDataset,  numberOfDiseasesDataSet ];
+
+                timestamp = metaWeightdata.bestThreshold.TimeStamp;
+
+                window.myBarMetaWeight.update();
+            }
+        );
+
+    document.getElementById('endThreshold').addEventListener(
+        'change',
+        () =>
+        {
+            endThreshold = Number(document.getElementById('endThreshold').value);
+
+            //Data processing:
+            let newDataPrecision = [];
+            let newDataRecall = [];
+            let newDataFScore = [];
+            let newDataMeanRankRealPositivesQuotient = [];
+
+            let thresholds = metaWeightdata.perThreshold.filter(a => a.Threshold >= beginThreshold && a.Threshold <= endThreshold);
+
+            barChartWeightData.labels = [];
+            for(let i = 0; i< thresholds.length; i++)
+            {
+                let actualThreshold = thresholds[i];
+                //Change the label
+                barChartWeightData.labels.push(actualThreshold.Threshold);
+
+                newDataPrecision[i] = actualThreshold.Precision;
+                newDataRecall[i] = actualThreshold.Recall;
+                newDataFScore[i] = actualThreshold.F_Score;
+                newDataMeanRankRealPositivesQuotient[i] = actualThreshold.MeanRankRealPositives / actualThreshold.MeanNumberOfRelatedEntitiesFound;
+            }
+
+
+
+            //Create bars
+            precisionWeightDataset.data = newDataPrecision;
+            recallWeightDataset.data = newDataRecall;
+            fscoreWeightDataset.data = newDataFScore;
+            meanRankrealPositivesQuotientWeightDataset.data = newDataMeanRankRealPositivesQuotient;
+
+            barChartWeightData.datasets=[ precisionWeightDataset, recallWeightDataset, fscoreWeightDataset, meanRankrealPositivesQuotientWeightDataset,  numberOfDiseasesDataSet ];
+
+            timestamp = metaWeightdata.bestThreshold.TimeStamp;
+
+            window.myBarMetaWeight.update();
+        }
+    );
 
 });
 

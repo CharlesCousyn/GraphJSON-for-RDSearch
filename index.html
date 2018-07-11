@@ -86,6 +86,10 @@
     <button id="addRemoveFscoreMetaWeight" class="button fScore">Add/Remove F-Score</button>
     <button id="addRemoveMeanRankRealPositivesQuotientMetaWeight" class="button meanRankRealPositivesQuotient">Add/Remove MeanRankRealPositivesQuotient</button>
     <button id="showAllMetaWeight" class="button">Show All</button>
+    <div><p>Begin Threshold</p></div>
+    <input type="number" id="beginThreshold" min="0" max="10" step="0.01" value="0"/>
+    <div><p>End Threshold</p></div>
+    <input type="number" id="endThreshold" min="0" max="10" step="0.01" value="2.5"/>
 
     <p>Select a result file from the MetaWeightEvaluation process:</p>
     <input id="loadMetaWeightResults" name="monFichier" type="file">
