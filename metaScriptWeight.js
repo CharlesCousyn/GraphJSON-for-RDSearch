@@ -14,6 +14,7 @@ let precisionWeightDataset =
         //borderColor: "#000000",
         borderColor: "#36a2eb",
         //borderWidth: 1,
+        fill: false,
         borderWidth: 2,
         yAxisID:"perf",
         data: []
@@ -25,6 +26,7 @@ let recallWeightDataset = {
     //borderColor: "#000000",
     borderColor: "#f1f442",
     //borderWidth: 1,
+    fill: false,
     borderWidth: 2,
     yAxisID:"perf",
     data: []
@@ -36,6 +38,7 @@ let fscoreWeightDataset = {
     //borderColor: "#000000",
     borderColor: "#ff6384",
     //borderWidth: 1,
+    fill: false,
     borderWidth: 2,
     yAxisID:"perf",
     data: []
@@ -47,6 +50,7 @@ let meanRankrealPositivesQuotientWeightDataset = {
     //borderColor: "#000000",
     borderColor: "#ff8216",
     //borderWidth: 1,
+    fill: false,
     borderWidth: 2,
     yAxisID:"meanRank",
     data: []
@@ -96,12 +100,12 @@ window.addEventListener("load", function()
                                 }
                             },
                             {
-                                label:"MeanRank",
+                                label:"MeanRankRealPositivesQuotient",
                                 id: 'meanRank',
                                 type: 'linear',
                                 position: 'right',
                                 scaleLabel:{
-                                    labelString:"MeanRank",
+                                    labelString:"MeanRankRealPositivesQuotient",
                                     display:true,
                                     fontSize:16,
                                     fontColor:"#666",
@@ -264,7 +268,7 @@ window.addEventListener("load", function()
                 fscoreWeightDataset.data = newDataFScore;
                 meanRankrealPositivesQuotientWeightDataset.data = newDataMeanRankRealPositivesQuotient;
 
-                barChartWeightData.datasets=[ precisionWeightDataset, recallWeightDataset, fscoreWeightDataset, meanRankrealPositivesQuotientWeightDataset,  numberOfDiseasesDataSet ];
+                barChartWeightData.datasets=[ precisionWeightDataset, recallWeightDataset, fscoreWeightDataset, meanRankrealPositivesQuotientWeightDataset];
 
                 timestamp = metaWeightdata.bestThreshold.TimeStamp;
 
@@ -311,7 +315,7 @@ window.addEventListener("load", function()
                 fscoreWeightDataset.data = newDataFScore;
                 meanRankrealPositivesQuotientWeightDataset.data = newDataMeanRankRealPositivesQuotient;
 
-                barChartWeightData.datasets=[ precisionWeightDataset, recallWeightDataset, fscoreWeightDataset, meanRankrealPositivesQuotientWeightDataset,  numberOfDiseasesDataSet ];
+                barChartWeightData.datasets=[ precisionWeightDataset, recallWeightDataset, fscoreWeightDataset, meanRankrealPositivesQuotientWeightDataset];
 
                 timestamp = metaWeightdata.bestThreshold.TimeStamp;
 
@@ -354,7 +358,7 @@ window.addEventListener("load", function()
             fscoreWeightDataset.data = newDataFScore;
             meanRankrealPositivesQuotientWeightDataset.data = newDataMeanRankRealPositivesQuotient;
 
-            barChartWeightData.datasets=[ precisionWeightDataset, recallWeightDataset, fscoreWeightDataset, meanRankrealPositivesQuotientWeightDataset,  numberOfDiseasesDataSet ];
+            barChartWeightData.datasets=[ precisionWeightDataset, recallWeightDataset, fscoreWeightDataset, meanRankrealPositivesQuotientWeightDataset];
 
             timestamp = metaWeightdata.bestThreshold.TimeStamp;
 
