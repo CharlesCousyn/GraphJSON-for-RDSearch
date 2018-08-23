@@ -33,7 +33,7 @@ let fscoreDataset = {
 };
 
 let meanRankrealPositivesQuotientDataset = {
-    label: 'MeanRankRealPositivesQuotient',
+    label: 'RMVS',
     backgroundColor: "#ff8216",
     borderColor: "#000000",
     borderWidth: 1,
@@ -251,6 +251,7 @@ window.addEventListener("load", function()
                 document.getElementById("meanNumberOfRelatedEntitiesFoundValue").textContent = data.general.MeanNumberOfRelatedEntitiesFound;
 
                 let diseases = data.perDisease;
+                console.log(diseases.length);
 
                 //Data processing:
                 let newData = [];
@@ -272,7 +273,9 @@ window.addEventListener("load", function()
 
                     //Find the coresponding elements
                     newData[i] = diseases
-                        .filter(x => x.NumberOfPublications >= i*sizeBar && x.NumberOfPublications < (i+1)*sizeBar);
+                        .filter(x => (x.NumberOfPublications >= i*sizeBar && x.NumberOfPublications < (i+1)*sizeBar) ||
+                            (i === numberOfBar - 1 && x.NumberOfPublications >= i*sizeBar));
+                    console.log(newData[i].length);
                     //console.log(newData[i].map(x=>x.Precision));
                     newDataPrecision[i] = average(newData[i].map(x=>x.Precision));
                     newDataRecall[i] = average(newData[i].map(x=>x.Recall));
@@ -330,7 +333,8 @@ window.addEventListener("load", function()
 
                 //Find the coresponding elements
                 newData[i] = diseases
-                    .filter(x => x.NumberOfPublications >= i*sizeBar && x.NumberOfPublications < (i+1)*sizeBar);
+                    .filter(x => (x.NumberOfPublications >= i*sizeBar && x.NumberOfPublications < (i+1)*sizeBar) ||
+                        (i === numberOfBar - 1 && x.NumberOfPublications >= i*sizeBar));
                 //console.log(newData[i].map(x=>x.Precision));
                 newDataPrecision[i] = average(newData[i].map(x=>x.Precision));
                 newDataRecall[i] = average(newData[i].map(x=>x.Recall));

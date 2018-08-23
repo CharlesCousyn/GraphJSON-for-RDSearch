@@ -232,10 +232,15 @@ window.addEventListener("load", function()
                 metaWeightdata = JSON.parse(event.target.result);
 
                 //Best informations
+                document.getElementById("bestThreshold").textContent = metaWeightdata.bestThreshold.Threshold;
                 document.getElementById("precisionMetaWeightValue").textContent = metaWeightdata.bestThreshold.Precision;
                 document.getElementById("recallMetaWeightValue").textContent = metaWeightdata.bestThreshold.Recall;
                 document.getElementById("fscoreMetaWeightValue").textContent = metaWeightdata.bestThreshold.F_Score;
                 document.getElementById("meanRankRealPositivesMetaWeightValue").textContent = metaWeightdata.bestThreshold.MeanRankRealPositives;
+                document.getElementById("standardDeviationRankRealPositivesGeneralMetaWeightValue").textContent = metaWeightdata.bestThreshold.StandardDeviationRankRealPositivesGeneral;
+                document.getElementById("RPMetaWeightValue").textContent = metaWeightdata.bestThreshold.RealPositives;
+                document.getElementById("FPMetaWeightValue").textContent = metaWeightdata.bestThreshold.FalsePositives;
+                document.getElementById("FNMetaWeightValue").textContent = metaWeightdata.bestThreshold.FalseNegatives;
 
                 let thresholds = metaWeightdata.perThreshold.sort((a, b) => a.Threshold - b.Threshold);
 
@@ -254,7 +259,8 @@ window.addEventListener("load", function()
                     newDataPrecision[i] = actualThreshold.Precision;
                     newDataRecall[i] = actualThreshold.Recall;
                     newDataFScore[i] = actualThreshold.F_Score;
-                    newDataMeanRankRealPositivesQuotient[i] = actualThreshold.MeanRankRealPositives / actualThreshold.MeanNumberOfRelatedEntitiesFound;
+                    //newDataMeanRankRealPositivesQuotient[i] = actualThreshold.MeanRankRealPositives / actualThreshold.MeanNumberOfRelatedEntitiesFound;
+                    newDataMeanRankRealPositivesQuotient[i] = actualThreshold.MeanRankRealPositives;
                     console.log(actualThreshold.MeanRankRealPositives);
                     console.log(actualThreshold.MeanNumberOfRelatedEntitiesFound);
                     console.log(newDataMeanRankRealPositivesQuotient[i]);
